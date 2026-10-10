@@ -1,0 +1,6 @@
+{
+  "name": "Grand Royale Casino",
+  "description": "Premium play-money casino featuring 10 classic games with virtual chips, provably fair engine, ledger transactions, and responsible gaming.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

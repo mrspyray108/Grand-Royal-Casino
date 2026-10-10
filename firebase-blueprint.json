@@ -1,0 +1,135 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile with display name, chip balance, preferences, and casino stats.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Unique Firebase Authentication UID of the user."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "User chosen display name shown in games and leaderboards."
+        },
+        "username": {
+          "type": "string",
+          "description": "Username handle."
+        },
+        "chipBalance": {
+          "type": "integer",
+          "description": "Current virtual play-money chip balance."
+        },
+        "balance": {
+          "type": "integer",
+          "description": "Virtual chip balance mirror."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "User email address."
+        },
+        "preferences": {
+          "type": "object",
+          "description": "User gameplay and app preferences.",
+          "properties": {
+            "soundEnabled": { "type": "boolean" },
+            "hapticEnabled": { "type": "boolean" },
+            "soundVolume": { "type": "number" },
+            "theme": { "type": "string" },
+            "emailNotifications": { "type": "boolean" },
+            "favoriteGame": { "type": "string" },
+            "isPrivacyOptedOut": { "type": "boolean" },
+            "autoSpinLimit": { "type": "integer" },
+            "showOddsDisplay": { "type": "boolean" }
+          }
+        },
+        "vipTier": {
+          "type": "string",
+          "description": "Current VIP tier (e.g. BRONZE, SILVER, GOLD, PLATINUM, DIAMOND)."
+        },
+        "totalBets": {
+          "type": "integer",
+          "description": "Cumulative total chips wagered."
+        },
+        "totalWon": {
+          "type": "integer",
+          "description": "Cumulative total chips won."
+        },
+        "roundsPlayed": {
+          "type": "integer",
+          "description": "Total number of game rounds completed."
+        },
+        "favoriteGameId": {
+          "type": "string",
+          "description": "ID of user's favorite game."
+        },
+        "avatarEmoji": {
+          "type": "string",
+          "description": "Selected avatar emoji."
+        },
+        "clientSeed": {
+          "type": "string",
+          "description": "Client seed for provably fair calculations."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of account creation."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of last profile update."
+        }
+      },
+      "required": ["userId", "displayName", "chipBalance"]
+    },
+    "LedgerEntry": {
+      "title": "LedgerEntry",
+      "description": "Immutable ledger record for chips movement.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string" },
+        "amount": { "type": "integer" },
+        "balanceAfter": { "type": "integer" },
+        "idempotencyKey": { "type": "string" },
+        "note": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "type", "amount", "balanceAfter", "idempotencyKey"]
+    },
+    "ProvablyFairRound": {
+      "title": "ProvablyFairRound",
+      "description": "Public immutable record of a provably fair game round.",
+      "type": "object",
+      "properties": {
+        "roundId": { "type": "string" },
+        "gameType": { "type": "string" },
+        "serverSeedHashed": { "type": "string" },
+        "clientSeed": { "type": "string" },
+        "nonce": { "type": "integer" },
+        "outcomeHash": { "type": "string" },
+        "summary": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["roundId", "gameType", "serverSeedHashed", "clientSeed", "nonce", "outcomeHash"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private user profile and chip wallet storage."
+    },
+    "/users/{userId}/ledger/{ledgerId}": {
+      "schema": { "$ref": "#/entities/LedgerEntry" },
+      "description": "User transaction ledger log."
+    },
+    "/rounds/{roundId}": {
+      "schema": { "$ref": "#/entities/ProvablyFairRound" },
+      "description": "Public audit records for provably fair rounds."
+    }
+  }
+}
